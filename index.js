@@ -1,86 +1,67 @@
-var state = "Home"
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 
 
-
-var ListExample = React.createClass({
-
-    changeState: function(newState){
-        this.setState({mode: newState});
-    },
-
-    getInitialState: function(){
-        return { mode: 0 };
-    },
-
-    render: function() {
-
-        var self = this;
-        var menuState = MenuExample.state
-        var products = this.props.items[this.state.mode].map(function(s){
+class ListExample extends React.Component {
+    render() {
+        var products = this.props.items.map((s) =>{
                 return <Product name={s.name} quantity={s.quantity} active={s.active} />;
         });
 
         return <div>
                     <h1>Beer List</h1>
-                    
-                    <div id="products">
+                    <div id = "products" >
                         {products}
-
-
                     </div>
-
                 </div>;
-
     }
-});
+};
 
-var MenuExample = React.createClass({
-    getInitialState: function(){
-        return { focused: 0 };
-    },
+class MenuExample extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = { focused : 0 };
+    }
 
-    clicked: function(index){
+    clicked(index){
         this.setState({focused: index});
-        ListExample.changeState(index);
-    },
+    }
 
-    render: function() {
-
-
-        var self = this;
-
-
+    render() {
         return (
             <div>
-                <ul>{ this.props.items.map(function(m, index){
-        
+                <ul>{ this.props.items.map((m, index) => {        
                     var style = '';
         
-                    if(self.state.focused == index){
+                    if(this.state.focused == index){
                         style = 'focused';
                     }
         
-                    return <li className={style} onClick={self.clicked.bind(self, index)}>{m}</li>;
-        
+                    return <li className={style} onClick={()=>{
+
+                        this.props.handleChange(index);
+                        this.clicked(index);
+
+                    }}>{m}</li>;
                 }) }
                         
                 </ul>
-                
-                <div id="list"></div>
             </div>
         );
 
+
     }
-});
+};
 
-var Product = React.createClass({
+class Product extends React.Component {
 
-    getInitialState: function(){
-        return { active: false };
-    },
+    constructor(props){
+        super(props);
+        this.state = { active: false };
+    }
 
-    render: function(){
+    render(){
 
         return  <p className={ this.state.active ? 'active' : '' }>
                     {this.props.name} <b>{this.props.quantity.toFixed(2)}</b>
@@ -88,7 +69,27 @@ var Product = React.createClass({
 
     }
 
-});
+};
+
+
+class MyApp extends React.Component {
+    constructor(props){
+        super(props);
+        this.handleChange = this.handleChange.bind(this);
+        this.state = { mode: 0 };
+    }
+
+    handleChange(state) {
+        this.setState({mode: state});
+    }
+
+    render() {
+        return  <div>
+                    <MenuExample items={this.props.menus} handleChange={this.handleChange} />
+                    <ListExample items={this.props.products[this.state.mode]} />
+                </div>;
+    }
+};
 
 var listItems = [
         [
@@ -107,13 +108,7 @@ var listItems = [
         ]
     ];
 
-ReactDOM.render(
-    <MenuExample items={ ['Home', 'Stocks', 'Commandes'] } />,
-    document.getElementById('menu')
-);
 
 ReactDOM.render(
-    <ListExample items ={ listItems } />,
-    document.getElementById('list')
-);
-
+    <MyApp menus={['Home', 'Stocks', 'Commandes']} products={listItems} />,
+    document.getElementById('myapp'))
