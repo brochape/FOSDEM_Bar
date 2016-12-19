@@ -3,10 +3,15 @@ import ReactDOM from 'react-dom';
 
 
 
-class ListExample extends React.Component {
+class StockList extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
     render() {
-        var products = this.props.items.map((s) =>{
-                return <Product name={s.name} quantity={s.quantity} active={s.active} />;
+
+        var products = this.props.items.map((s,i) =>{
+            return <Product name={s.name} quantity={s.quantity} />;
         });
 
         return <div>
@@ -17,6 +22,44 @@ class ListExample extends React.Component {
                 </div>;
     }
 };
+
+class OrderList extends React.Component{
+
+    constructor(props) {
+        super(props);
+        this.state = {items: this.props.items}
+    }
+
+    render() {
+
+        var products = this.state.items.map((s,i) =>{
+            return <Product name={s.name} 
+                            quantity={s.quantity} 
+                            inc= {()=>this.inc(i)}
+                            dec= {()=>this.dec(i)}/>;
+        });
+
+        return <div>
+                    <h1>Beer List</h1>
+                    <div id = "products" >
+                        {products}
+                    </div>
+                </div>;
+    }
+
+
+    inc(index){
+        var newItems = this.state.items;
+        newItems[index].quantity++;
+        this.setState({items: newItems});
+    }
+
+    dec(index){
+        var newItems = this.state.items;
+        newItems[index].quantity = Math.max(0,newItems[index].quantity-1);
+        this.setState({items: newItems});
+    }
+}
 
 class MenuExample extends React.Component {
     constructor(props){
@@ -58,13 +101,19 @@ class Product extends React.Component {
 
     constructor(props){
         super(props);
-        this.state = { active: false };
     }
 
     render(){
-
-        return  <p className={ this.state.active ? 'active' : '' }>
-                    {this.props.name} <b>{this.props.quantity.toFixed(2)}</b>
+        var buttons = [];
+        if (this.props.inc) {
+            buttons.push(<button  onClick={this.props.inc}>+</button>);
+        }
+        if (this.props.dec) {
+            buttons.push(<button onClick={this.props.dec}>-</button>);
+        }
+        return  <p>
+                    {this.props.name} <b>{this.props.quantity}</b>
+                    {buttons}
                 </p>;
 
     }
@@ -75,7 +124,6 @@ class Product extends React.Component {
 class MyApp extends React.Component {
     constructor(props){
         super(props);
-        this.handleChange = this.handleChange.bind(this);
         this.state = { mode: 0 };
     }
 
@@ -84,16 +132,20 @@ class MyApp extends React.Component {
     }
 
     render() {
+        const products = this.props.products[this.state.mode];
+        var list = this.state.mode == 2 ?
+                           <OrderList items={products} /> : 
+                           <StockList items={products} />;
         return  <div>
-                    <MenuExample items={this.props.menus} handleChange={this.handleChange} />
-                    <ListExample items={this.props.products[this.state.mode]} />
+                    <MenuExample items={this.props.menus} handleChange={(index)=>this.handleChange(index)} />
+                    {list}
                 </div>;
     }
 };
 
 var listItems = [
         [
-
+            { name: 'Kriek', quantity: 220 }
         ],
         [
             { name: 'Jupiler', quantity: 300 },
@@ -102,9 +154,10 @@ var listItems = [
             { name: 'Kriek', quantity: 220 }
         ],
         [
-            {
-                name: 'test', quantity: 100
-            }
+            { name: 'Jupiler', quantity: 0 },
+            { name: 'Orval', quantity: 0 },
+            { name: 'Barbar', quantity: 0 },
+            { name: 'Kriek', quantity: 0 }
         ]
     ];
 
