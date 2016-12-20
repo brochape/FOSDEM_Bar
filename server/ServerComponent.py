@@ -65,7 +65,6 @@ class ServerComponent(ApplicationSession):
         return changes
 
     async def onJoin(self, details):
-        print("session ready")
         await self.register(self.order_create, u'order.create')
         await self.register(self.order_finish, u'order.finish')
         await self.register(self.stock_change, u'stock.change')
@@ -74,12 +73,6 @@ class ServerComponent(ApplicationSession):
         self.connection = await self.engine.acquire()
         await create_table(self.connection, orders)
         await create_table(self.connection, stocks)
-
-        # only tests below
-        x = await self.call(u'order.create',
-                            {'product': 'leffe', 'quantity': 4})
-        await self.call(u'order.finish', x)
-        await self.call(u'stock.change', {'product': 'caca', 'quantity': 4})
 
 
 runner = ApplicationRunner(url=u"ws://localhost:8080/ws", realm=u"realm1")
