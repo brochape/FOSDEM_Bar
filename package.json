@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --progress",
+    "build-watch": "webpack --progress --watch",
+    "build-prod": "webpack --progress --optimize-minimize --optimize-dedupe --optimize-occurence-order"
   },
   "repository": {
     "type": "git",
@@ -25,6 +28,10 @@
     "babel-preset-react": "^6.16.0",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
-    "webpack": "^1.14.0"
+    "webpack": "^1.14.0",
+    "json-loader": "^0.5.4"
+  },
+  "dependencies": {
+    "autobahn": "^0.11.1"
   }
 }
