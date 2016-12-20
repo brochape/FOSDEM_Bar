@@ -55,6 +55,7 @@ class OrderList extends React.Component{
                                                    });
         Promise.all(toSend.map((order) => order['quantity'] != 0 ? session.call('order.create', [order])
                                                                  : null));
+        this.setState({items: this.state.items.map((order) => { order['quantity'] = 0; return order })});
     }
 
     render() {
