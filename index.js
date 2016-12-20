@@ -3,6 +3,22 @@ import ReactDOM from 'react-dom';
 import autobahn from 'autobahn';
 
 
+var connection = new autobahn.Connection({
+   url: "ws://127.0.0.1:8080/ws",
+   realm: "realm1"
+});
+
+var session = null;
+
+connection.onopen = (s, d) => {
+    session = s;
+}
+
+connection.onclose = (r, d) => {
+
+}
+
+connection.open()
 
 class StockList extends React.Component {
     constructor(props) {
@@ -31,6 +47,16 @@ class OrderList extends React.Component{
         this.state = {items: this.props.items}
     }
 
+    handleClick() {
+        var toSend = this.state.items.map((order) => { var neworder = {};
+                                                     neworder['product'] = order['name'];
+                                                     neworder['quantity'] = order['quantity'];
+                                                     return neworder;
+                                                   });
+        Promise.all(toSend.map((order) => order['quantity'] != 0 ? session.call('order.create', [order])
+                                                                 : null));
+    }
+
     render() {
 
         var products = this.state.items.map((s,i) =>{
@@ -45,6 +71,7 @@ class OrderList extends React.Component{
                     <div id = "products" >
                         {products}
                     </div>
+                    <button onClick={() => this.handleClick()}>Order</button>
                 </div>;
     }
 
