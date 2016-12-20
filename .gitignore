@@ -1,3 +1,4 @@
 ve/
 *__pycache__*
 *.crossbar*
+node_modules
