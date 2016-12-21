@@ -49,8 +49,8 @@ class OrderList extends React.Component{
                     <h1>Beer List</h1>
                     <div id = "products" >
                         {this.state.products}
+                        <button id="order" onClick={() => this.handleClick()}>Order</button>
                     </div>
-                    <button onClick={() => this.handleClick()}>Order</button>
                 </div>;
     }
 }
@@ -123,14 +123,13 @@ class Product extends React.Component {
     render(){
         var buttons = [];
         if (this.props.inc) {
-            buttons.push(<button  onClick={() => this.inc()}>+</button>);
+            buttons.push(<button onClick={() => this.inc()}>+</button>);
         }
         if (this.props.dec) {
             buttons.push(<button onClick={() => this.dec()}>-</button>);
         }
         return  <p>
-                    {this.props.name} <b>{this.state.quantity}</b>
-                    {buttons}
+                    {this.props.name} {buttons[0]}<b>{this.state.quantity}</b>{buttons[1]}
                 </p>;
 
     }
