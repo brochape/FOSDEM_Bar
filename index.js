@@ -3,23 +3,6 @@ import ReactDOM from 'react-dom';
 import autobahn from 'autobahn';
 
 
-var connection = new autobahn.Connection({
-   url: "ws://127.0.0.1:8080/ws",
-   realm: "realm1"
-});
-
-var session = null;
-
-connection.onopen = (s, d) => {
-    session = s;
-}
-
-connection.onclose = (r, d) => {
-
-}
-
-connection.open()
-
 class StockList extends React.Component {
     constructor(props) {
         super(props);
@@ -43,53 +26,35 @@ class OrderList extends React.Component{
 
     constructor(props) {
         super(props);
-        this.state = {items: this.props.items}
+        this.state = {
+            products: this.props.items.map((s,i) => <Product ref={i}
+                                                             name={s.name} 
+                                                             quantity={s.quantity}
+                                                             inc={true}
+                                                             dec={true} />)
+        }
     }
 
     handleClick() {
-        var toSend = this.state.items.map((order) => { var neworder = {};
-                                                     neworder['product'] = order['name'];
-                                                     neworder['quantity'] = order['quantity'];
-                                                     return neworder;
-                                                   });
-        Promise.all(toSend.map((order) => order['quantity'] != 0 ? session.call('order.create', [order])
-                                                                 : null));
-        this.setState({items: this.state.items.map((order) => { order['quantity'] = 0; return order })});
+        var products = Object.keys(this.refs).map((key) => this.refs[key].values());
+        Promise.all(products.map((order) => order['quantity'] != 0 ? 
+                                            this.props.session.call('order.create', [order]) : 
+                                            null));
+        Object.keys(this.refs).map((key) => this.refs[key].reset());
     }
 
     render() {
-
-        var products = this.state.items.map((s,i) =>{
-            return <Product name={s.name} 
-                            quantity={s.quantity} 
-                            inc= {()=>this.inc(i)}
-                            dec= {()=>this.dec(i)}/>;
-        });
-
         return <div>
                     <h1>Beer List</h1>
                     <div id = "products" >
-                        {products}
+                        {this.state.products}
                         <button id="order" onClick={() => this.handleClick()}>Order</button>
                     </div>
                 </div>;
     }
-
-
-    inc(index){
-        var newItems = this.state.items;
-        newItems[index].quantity++;
-        this.setState({items: newItems});
-    }
-
-    dec(index){
-        var newItems = this.state.items;
-        newItems[index].quantity = Math.max(0,newItems[index].quantity-1);
-        this.setState({items: newItems});
-    }
 }
 
-class MenuExample extends React.Component {
+class Menu extends React.Component {
     constructor(props){
         super(props);
         this.state = { focused : 0 };
@@ -144,14 +109,35 @@ class Product extends React.Component {
 
     constructor(props){
         super(props);
+        this.state = {quantity: 0};
+    }
+
+
+    inc(){
+        this.setState({quantity: this.state.quantity + 1});
+    }
+
+    dec(){
+        if (this.state.quantity > 0) {
+            this.setState({quantity: this.state.quantity - 1});
+        }
+    }
+
+    values() {
+        return {
+            product: this.props.name,
+            quantity: this.state.quantity
+        };
+    }
+
+    reset() {
+        this.setState({quantity: 0});
     }
 
     render(){
         var buttons = [];
         if (this.props.inc) {
             buttons.push(<VeryLargeButton left onClick={this.props.inc}>+</VeryLargeButton>);
-        }
-        console.log(buttons);
         if (this.props.dec) {
             buttons.push(<VeryLargeButton right onClick={this.props.dec}>-</VeryLargeButton>);
         }
@@ -163,6 +149,8 @@ class Product extends React.Component {
                         {buttons}
                     </div>
                 </div>;
+        }
+
     }
 
 };
@@ -171,7 +159,25 @@ class Product extends React.Component {
 class MyApp extends React.Component {
     constructor(props){
         super(props);
-        this.state = { mode: 0 };
+        this.state = { 
+            mode: 2,
+            session: null
+        };
+
+        this.connection = new autobahn.Connection({
+           url: "ws://127.0.0.1:8080/ws",
+           realm: "realm1"
+        });
+
+        this.connection.onopen = (s, d) => {
+            this.setState({session: s});
+        }
+
+        this.connection.onclose = (r, d) => {
+
+        }
+
+        this.connection.open()
     }
 
     handleChange(state) {
@@ -181,10 +187,10 @@ class MyApp extends React.Component {
     render() {
         const products = this.props.products[this.state.mode];
         var list = this.state.mode == 2 ?
-                           <OrderList items={products} /> : 
+                           <OrderList items={products} session={this.state.session}/> : 
                            <StockList items={products} />;
         return  <div>
-                    <MenuExample items={this.props.menus} handleChange={(index)=>this.handleChange(index)} />
+                    <Menu items={this.props.menus} handleChange={(index)=>this.handleChange(index)} />
                     {list}
                 </div>;
     }
