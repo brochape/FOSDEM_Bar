@@ -71,8 +71,8 @@ class OrderList extends React.Component{
                     <h1>Beer List</h1>
                     <div id = "products" >
                         {products}
+                        <button id="order" onClick={() => this.handleClick()}>Order</button>
                     </div>
-                    <button onClick={() => this.handleClick()}>Order</button>
                 </div>;
     }
 
@@ -152,6 +152,7 @@ class Product extends React.Component {
         if (this.props.inc) {
             buttons.push(<VeryLargeButton left onClick={this.props.inc}>+</VeryLargeButton>);
         }
+        console.log(buttons);
         if (this.props.dec) {
             buttons.push(<VeryLargeButton right onClick={this.props.dec}>-</VeryLargeButton>);
         }
@@ -161,7 +162,6 @@ class Product extends React.Component {
                         {buttons}
                     </div>
                 </div>;
-
     }
 
 };
