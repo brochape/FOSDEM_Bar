@@ -52,9 +52,15 @@ export default class Product extends React.Component {
         if (this.props.dec) {
             buttons.push(<VeryLargeButton right onClick={() => this.dec()}>-</VeryLargeButton>);
         }
-        return  <p>
-                    {this.props.name} {buttons[0]}<b>{this.state.quantity}</b>{buttons[1]}
-                </p>;
+        return  <div>
+                    <div id="productname">
+                        {this.props.name} <b>{this.state.quantity}</b>
+                    </div>
+                    <div className="vlg">
+                        {buttons}
+                    </div>
+                </div>;
+
 
     }
 
