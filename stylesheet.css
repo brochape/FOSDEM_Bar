@@ -46,12 +46,11 @@ p{
 /*-----------LIST--------------*/
 #products{
     text-transform: uppercase;
-    text-align: left;
+    text-align: center;
     font-size: 20px;
     list-style: none;
     display: inline-block;
     width: 340px;
-    text-align: left;
 }
 
 #products p{
@@ -60,7 +59,6 @@ p{
     background-color: #F8F8F8;
     color: #7B8585;
     margin-bottom: 3px;
-    position: relative;
     cursor: pointer;
     
     transition: 0.3s;
@@ -88,7 +86,6 @@ p{
     font-size: 15px;
     width: 20px;
     text-align: left;
-    text-align: center;
     padding: 0px;
     margin-left: 2px;
 }
@@ -103,7 +100,6 @@ p{
     list-style: none;
     display: inline-block;
     width: 20px;
-    text-align: left;
     text-align: center;
     padding: 0px;
     margin-left: 2px;
@@ -183,7 +179,66 @@ sup  { font-size: 36px; font-weight: 100; line-height: 55px; }
   padding-right: 30px;
 }
 
-.button:hover span:after, .button:active span:after 
+/*---------------------------*/
+
+#productName {
+    text-align: right;
+    font-size: 100;
+}
+
+/*---------------------------*/
+
+
+/* VeryLargeButton container */
+.vlg {
+    font-size: 200%;
+    padding-bottom:20px;
+}
+
+/* A button */
+.vlg-button {
+    text-align: center;
+    margin: auto;
+    cursor: pointer;
+    display: inline-block;
+    width: 49%;
+    text-decoration: none;
+    color: #BC1AFF;
+    background: #FFF;
+    border: 1px solid #BC1AFF;
+}
+
+/* Left part */
+.vlg-button-left {
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    /*background-color: green;*/
+}
+
+/* Right part */
+.vlg-button-right {
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    /*background-color: red;*/
+}
+
+
+.vlg-button:hover, .vlg-button:active 
+{
+  text-decoration: none;
+  color: white;
+  border-color: #BC1AFF;
+    color:#fff;
+    background-color:#BC1AFF;
+}
+
+
+.vlg-button:hover span, .vlg-button:active span 
+{
+  padding-right: 30px;
+}
+
+.vlg-button:hover span:after, .vlg-button:active span:after 
 {
   transition: opacity 0.5s, top 0.5s, right 0.5s;
   opacity: 1;
