@@ -1,147 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import autobahn from 'autobahn';
-
-
-class StockList extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-
-        var products = this.props.items.map((s,i) =>{
-            return <Product name={s.name} quantity={s.quantity} />;
-        });
-
-        return <div>
-                    <h1>Beer List</h1>
-                    <div id = "products" >
-                        {products}
-                    </div>
-                </div>;
-    }
-};
-
-class OrderList extends React.Component{
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            products: this.props.items.map((s,i) => <Product ref={i}
-                                                             name={s.name} 
-                                                             quantity={s.quantity}
-                                                             inc={true}
-                                                             dec={true} />)
-        }
-    }
-
-    handleClick() {
-        var products = Object.keys(this.refs).map((key) => this.refs[key].values());
-        Promise.all(products.map((order) => order['quantity'] != 0 ? 
-                                            this.props.session.call('order.create', [order]) : 
-                                            null));
-        Object.keys(this.refs).map((key) => this.refs[key].reset());
-    }
-
-    render() {
-        return <div>
-                    <h1>Beer List</h1>
-                    <div id = "products" >
-                        {this.state.products}
-                        <button id="order" onClick={() => this.handleClick()}>Order</button>
-                    </div>
-                </div>;
-    }
-}
-
-class Menu extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = { focused : 0 };
-    }
-
-    clicked(index){
-        this.setState({focused: index});
-    }
-
-    render() {
-        return (
-            <div>
-                <ul>{ this.props.items.map((m, index) => {        
-                    var style = '';
-        
-                    if(this.state.focused == index){
-                        style = 'focused';
-                    }
-        
-                    return <li className={style} onClick={()=>{
-
-                        this.props.handleChange(index);
-                        this.clicked(index);
-
-                    }}>{m}</li>;
-                }) }
-                        
-                </ul>
-            </div>
-        );
-
-
-    }
-};
-
-class Product extends React.Component {
-
-    constructor(props){
-        super(props);
-        this.state = {quantity: 0};
-    }
-
-
-    inc(){
-        this.setState({quantity: this.state.quantity + 1});
-    }
-
-    dec(){
-        if (this.state.quantity > 0) {
-            this.setState({quantity: this.state.quantity - 1});
-        }
-    }
-
-    values() {
-        return {
-            product: this.props.name,
-            quantity: this.state.quantity
-        };
-    }
-
-    reset() {
-        this.setState({quantity: 0});
-    }
-
-    render(){
-        var buttons = [];
-        if (this.props.inc) {
-            buttons.push(<button onClick={() => this.inc()}>+</button>);
-        }
-        if (this.props.dec) {
-            buttons.push(<button onClick={() => this.dec()}>-</button>);
-        }
-        return  <p>
-                    {this.props.name} {buttons[0]}<b>{this.state.quantity}</b>{buttons[1]}
-                </p>;
-
-    }
-
-};
-
+import StockList from './components/StockList.jsx';
+import OrderList from './components/OrderList.jsx';
+import Menu from './components/Menu.jsx';
 
 class MyApp extends React.Component {
     constructor(props){
         super(props);
         this.state = { 
-            mode: 2,
+            mode: 0,
             session: null
         };
 
