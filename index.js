@@ -32,7 +32,6 @@ class StockList extends React.Component {
         });
 
         return <div>
-                    <h1>Beer List</h1>
                     <div id = "products" >
                         {products}
                     </div>
@@ -157,7 +156,9 @@ class Product extends React.Component {
             buttons.push(<VeryLargeButton right onClick={this.props.dec}>-</VeryLargeButton>);
         }
         return  <div>
-                    {this.props.name} <b>{this.props.quantity}</b>
+                    <div id="productname">
+                        {this.props.name} <b>{this.props.quantity}</b>
+                    </div>
                     <div className="vlg">
                         {buttons}
                     </div>
