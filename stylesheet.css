@@ -46,7 +46,7 @@ p{
 /*-----------LIST--------------*/
 #products{
     text-transform: uppercase;
-    text-align: left;
+    text-align: center;
     font-size: 20px;
     list-style: none;
     display: inline-block;
@@ -60,7 +60,6 @@ p{
     background-color: #F8F8F8;
     color: #7B8585;
     margin-bottom: 3px;
-    position: relative;
     cursor: pointer;
     
     transition: 0.3s;
@@ -195,7 +194,7 @@ sup  { font-size: 36px; font-weight: 100; line-height: 55px; }
 /* VeryLargeButton container */
 .vlg {
     font-size: 200%;
-    background-color: yellow;
+    padding-bottom:20px;
 }
 
 /* A button */
@@ -204,19 +203,48 @@ sup  { font-size: 36px; font-weight: 100; line-height: 55px; }
     margin: auto;
     cursor: pointer;
     display: inline-block;
-    width: 50%;
-    background-color: green;
+    width: 49%;
+    text-decoration: none;
+    color: #BC1AFF;
+    background: #FFF;
+    border: 1px solid #BC1AFF;
 }
 
 /* Left part */
 .vlg-button-left {
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
+    /*background-color: green;*/
 }
 
 /* Right part */
 .vlg-button-right {
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
-    background-color: red;
+    /*background-color: red;*/
+}
+
+
+.vlg-button:hover, .vlg-button:active 
+{
+  text-decoration: none;
+  color: white;
+  border-color: #BC1AFF;
+    color:#fff;
+    background-color:#BC1AFF;
+}
+
+
+.vlg-button:hover span, .vlg-button:active span 
+{
+  padding-right: 30px;
+}
+
+.vlg-button:hover span:after, .vlg-button:active span:after 
+{
+  transition: opacity 0.5s, top 0.5s, right 0.5s;
+  opacity: 1;
+  border-color: #0C5;
+  right: 0;
+  top: 50%;
 }
