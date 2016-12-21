@@ -126,6 +126,21 @@ class MenuExample extends React.Component {
     }
 };
 
+class VeryLargeButton extends React.Component {
+    constructor(props){
+        super(props)
+        let v = 'vlg-button'
+        let l = (props.left) ? 'left' : 'right'
+        this.bclass = `${v} ${v}-${l} ${props.className}`
+    }
+
+    render(){
+        return <div className={this.bclass} {...this.props}>
+                   {this.props.children}
+               </div>
+    }
+}
+
 class Product extends React.Component {
 
     constructor(props){
@@ -135,15 +150,17 @@ class Product extends React.Component {
     render(){
         var buttons = [];
         if (this.props.inc) {
-            buttons.push(<button  onClick={this.props.inc}>+</button>);
+            buttons.push(<VeryLargeButton left onClick={this.props.inc}>+</VeryLargeButton>);
         }
         if (this.props.dec) {
-            buttons.push(<button onClick={this.props.dec}>-</button>);
+            buttons.push(<VeryLargeButton right onClick={this.props.dec}>-</VeryLargeButton>);
         }
-        return  <p>
+        return  <div>
                     {this.props.name} <b>{this.props.quantity}</b>
-                    {buttons}
-                </p>;
+                    <div className="vlg">
+                        {buttons}
+                    </div>
+                </div>;
 
     }
 

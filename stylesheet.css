@@ -84,3 +84,33 @@ p{
 #products p.active b{
     color: #fff;
 }
+
+
+/* VeryLargeButton container */
+.vlg {
+    font-size: 200%;
+    background-color: yellow;
+}
+
+/* A button */
+.vlg-button {
+    text-align: center;
+    margin: auto;
+    cursor: pointer;
+    display: inline-block;
+    width: 50%;
+    background-color: green;
+}
+
+/* Left part */
+.vlg-button-left {
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+/* Right part */
+.vlg-button-right {
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-color: red;
+}
