@@ -3,23 +3,6 @@ import ReactDOM from 'react-dom';
 import autobahn from 'autobahn';
 
 
-var connection = new autobahn.Connection({
-   url: "ws://127.0.0.1:8080/ws",
-   realm: "realm1"
-});
-
-var session = null;
-
-connection.onopen = (s, d) => {
-    session = s;
-}
-
-connection.onclose = (r, d) => {
-
-}
-
-connection.open()
-
 class StockList extends React.Component {
     constructor(props) {
         super(props);
@@ -53,7 +36,7 @@ class OrderList extends React.Component{
                                                      neworder['quantity'] = order['quantity'];
                                                      return neworder;
                                                    });
-        Promise.all(toSend.map((order) => order['quantity'] != 0 ? session.call('order.create', [order])
+        Promise.all(toSend.map((order) => order['quantity'] != 0 ? this.props.session.call('order.create', [order])
                                                                  : null));
         this.setState({items: this.state.items.map((order) => { order['quantity'] = 0; return order })});
     }
@@ -154,6 +137,23 @@ class MyApp extends React.Component {
     constructor(props){
         super(props);
         this.state = { mode: 0 };
+
+        this.connection = new autobahn.Connection({
+           url: "ws://127.0.0.1:8080/ws",
+           realm: "realm1"
+        });
+
+        this.session = null;
+
+        this.connection.onopen = (s, d) => {
+            this.session = s;
+        }
+
+        this.connection.onclose = (r, d) => {
+
+        }
+
+        this.connection.open()
     }
 
     handleChange(state) {
@@ -163,7 +163,7 @@ class MyApp extends React.Component {
     render() {
         const products = this.props.products[this.state.mode];
         var list = this.state.mode == 2 ?
-                           <OrderList items={products} /> : 
+                           <OrderList items={products} session={this.session}/> : 
                            <StockList items={products} />;
         return  <div>
                     <MenuExample items={this.props.menus} handleChange={(index)=>this.handleChange(index)} />
