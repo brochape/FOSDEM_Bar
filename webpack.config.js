@@ -8,7 +8,7 @@ module.exports = {
         loaders: [
       { test: /\.json$/, loader: 'json-loader'},
        {
-            test: /\.js$/,
+            test: /\.jsx?$/,
             loader: 'babel',
             query: {
               presets: ["es2015", "react"]
