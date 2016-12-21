@@ -1,5 +1,20 @@
 import React from 'react';
 
+class VeryLargeButton extends React.Component {
+    constructor(props){
+        super(props)
+        let v = 'vlg-button'
+        let l = (props.left) ? 'left' : 'right'
+        this.bclass = `${v} ${v}-${l} ${props.className}`
+    }
+
+    render(){
+        return <div className={this.bclass} {...this.props}>
+                   {this.props.children}
+               </div>
+    }
+}
+
 export default class Product extends React.Component {
 
     constructor(props){
@@ -32,14 +47,20 @@ export default class Product extends React.Component {
     render(){
         var buttons = [];
         if (this.props.inc) {
-            buttons.push(<button onClick={() => this.inc()}>+</button>);
+            buttons.push(<VeryLargeButton left onClick={() => this.inc()}>+</VeryLargeButton>);
         }
         if (this.props.dec) {
-            buttons.push(<button onClick={() => this.dec()}>-</button>);
+            buttons.push(<VeryLargeButton right onClick={() => this.dec()}>-</VeryLargeButton>);
         }
-        return  <p>
-                    {this.props.name} {buttons[0]}<b>{this.state.quantity}</b>{buttons[1]}
-                </p>;
+        return  <div>
+                    <div id="productname">
+                        {this.props.name} <b>{this.state.quantity}</b>
+                    </div>
+                    <div className="vlg">
+                        {buttons}
+                    </div>
+                </div>;
+
 
     }
 
