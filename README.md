@@ -10,3 +10,6 @@
  * `npm install`
  * `webpack`
  * open the index.html file in a browser
+ 
+ #Screenshot
+ ![](https://github.com/SupayrPoney/FOSDEM_Bar/raw/master/screenshot.png)
