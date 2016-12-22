@@ -14,9 +14,18 @@ metadata = sa.MetaData()
 orders = sa.Table('orders',
                   metadata,
                   sa.Column('id', sa.Integer, primary_key=True),
-                  sa.Column('product', sa.String(255)),
-                  sa.Column('quantity', sa.Integer),
+                  sa.Column('from', sa.String(255)),
                   sa.Column('finished', sa.Boolean, default=False))
+
+order_lines = sa.Table('order_lines',
+                       metadata,
+                       sa.Column('id', sa.Integer, primary_key=True),
+                       sa.Column('product', sa.String(255)),
+                       sa.Column('quantity', sa.Integer),
+                       sa.Column('order_id',
+                                 sa.Integer,
+                                 sa.ForeignKey('orders.id'),
+                                 nullable=False))
 
 stocks = sa.Table('stocks',
                   metadata,
@@ -28,16 +37,25 @@ async def create_table(conn, table):
     try:
         await conn.execute(dump_sql(partial(table.create, checkfirst=True))())
     except ProgrammingError:  # table already exists
-        pass
+        print("Table {} already exists".format(table))
 
 
 class ServerComponent(ApplicationSession):
     async def order_create(self, order):
         async with self.engine.acquire() as connection:
-            result = await connection.execute(orders.insert().values(**order)
-                                                             .returning())
+            result = await connection.execute(orders.insert()
+                                                    .values({
+                                                        'from': order['from']
+                                                    }).returning())
             first = await result.first()
             order['id'] = first[0]
+            for product in order['products']:
+                product['order_id'] = order['id']
+                await connection.execute(order_lines.insert()
+                                                    .values(**product)
+                                                    .returning())
+                del product['order_id']
+            del order['id']
             self.publish(u'order.oncreate', order)
             print("Created order", order)
 
@@ -57,8 +75,9 @@ class ServerComponent(ApplicationSession):
                                        .connection
                                        .execute(select([
                                                        stocks.c.product,
-                                                       func.sum(stocks.c.quantity)
-                                                           .label("total")
+                                                       func
+                                                       .sum(stocks.c.quantity)
+                                                       .label("total")
                                                        ])
                                                 .group_by(stocks.c.product)))
             stocks_by_product = [dict(r) for r in stocks_by_product]
@@ -73,6 +92,7 @@ class ServerComponent(ApplicationSession):
                                           database='fosdem')
         async with self.engine.acquire() as connection:
             await create_table(connection, orders)
+            await create_table(connection, order_lines)
             await create_table(connection, stocks)
 
 

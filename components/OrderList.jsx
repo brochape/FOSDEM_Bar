@@ -2,7 +2,6 @@ import React from 'react';
 import Product from './Product.jsx';
 
 export default class OrderList extends React.Component{
-
     constructor(props) {
         super(props);
         this.state = {
@@ -16,9 +15,8 @@ export default class OrderList extends React.Component{
 
     handleClick() {
         var products = Object.keys(this.refs).map((key) => this.refs[key].values());
-        Promise.all(products.map((order) => order['quantity'] != 0 ? 
-                                            this.props.session.call('order.create', [order]) : 
-                                            null));
+        products = products.filter((prod) => prod.quantity != 0);
+        this.props.session.call('order.create', [{'from': 'myself', 'products': products}])
         Object.keys(this.refs).map((key) => this.refs[key].reset());
     }
 
