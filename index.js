@@ -35,7 +35,6 @@ class MyApp extends React.Component {
     }
 
     chooseAssigment(name) {
-        console.log(name);
         this.setState({assignment: name});
     }
 
