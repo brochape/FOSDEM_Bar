@@ -11,6 +11,7 @@ class MyApp extends React.Component {
         this.state = { 
             mode: 0,
             session: null,
+            server_running: false,
             assignment: null
         };
 
@@ -21,6 +22,12 @@ class MyApp extends React.Component {
 
         this.connection.onopen = (s, d) => {
             this.setState({session: s});
+            try {
+                this.state.session.call('ping_server', []).then((res) => this.setState({server_running: true}));
+            }
+            catch (e) { // If error thrown => test_session function does not exist => server not running
+                this.setState({server_running: false});
+            }
         }
 
         this.connection.onclose = (r, d) => {
@@ -41,6 +48,9 @@ class MyApp extends React.Component {
     render() {
         if (this.state.session == null) {
             return <div>Could not open autobahn session</div>;
+        }
+        else if (this.state.server_running == false) {
+            return <div>Server component is not running</div>;
         }
         else {
             if (this.state.assignment == null) {
