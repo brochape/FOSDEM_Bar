@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import autobahn from 'autobahn';
-import StockList from './components/StockList.jsx';
+import ProductList from './components/ProductList.jsx';
 import BarOrder from './components/BarOrder.jsx';
 import Menu from './components/Menu.jsx';
 
@@ -66,7 +66,7 @@ class MyApp extends React.Component {
                 const products = this.props.products[this.state.mode];
                 let list = this.state.mode == 2 ?
                                    <BarOrder bar={this.state.assignment} items={products} session={this.state.session}/> : 
-                                   <StockList items={products} />;
+                                   <ProductList items={products} />;
                 return  <div>
                             <Menu items={this.props.menus} handleChange={(index)=>this.handleChange(index)} />
                             {list}
