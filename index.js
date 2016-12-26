@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import autobahn from 'autobahn';
 import StockList from './components/StockList.jsx';
-import OrderList from './components/OrderList.jsx';
+import BarOrder from './components/BarOrder.jsx';
 import Menu from './components/Menu.jsx';
 
 class MyApp extends React.Component {
@@ -65,7 +65,7 @@ class MyApp extends React.Component {
             else {
                 const products = this.props.products[this.state.mode];
                 let list = this.state.mode == 2 ?
-                                   <OrderList bar={this.state.assignment} items={products} session={this.state.session}/> : 
+                                   <BarOrder bar={this.state.assignment} items={products} session={this.state.session}/> : 
                                    <StockList items={products} />;
                 return  <div>
                             <Menu items={this.props.menus} handleChange={(index)=>this.handleChange(index)} />

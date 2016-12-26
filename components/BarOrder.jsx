@@ -1,7 +1,7 @@
 import React from 'react';
 import Product from './Product.jsx';
 
-export default class OrderList extends React.Component{
+export default class BarOrder extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
