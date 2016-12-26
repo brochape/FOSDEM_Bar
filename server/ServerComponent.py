@@ -43,21 +43,22 @@ async def create_table(conn, table):
 class ServerComponent(ApplicationSession):
     async def order_create(self, order):
         async with self.engine.acquire() as connection:
-            result = await connection.execute(orders.insert()
-                                                    .values({
-                                                        'from': order['from']
-                                                    }).returning())
-            first = await result.first()
-            order['id'] = first[0]
-            for product in order['products']:
-                product['order_id'] = order['id']
-                await connection.execute(order_lines.insert()
-                                                    .values(**product)
-                                                    .returning())
-                del product['order_id']
-            del order['id']
-            self.publish(u'order.oncreate', order)
-            print("Created order", order)
+            if len(order['products']) > 0:
+                result = await connection.execute(orders.insert()
+                                                        .values({
+                                                            'from': order['from']
+                                                        }).returning())
+                first = await result.first()
+                order['id'] = first[0]
+                for product in order['products']:
+                    product['order_id'] = order['id']
+                    await connection.execute(order_lines.insert()
+                                                        .values(**product)
+                                                        .returning())
+                    del product['order_id']
+                del order['id']
+                self.publish(u'order.oncreate', order)
+                print("Created order", order)
 
     async def order_finish(self, order):
         async with self.engine.acquire() as connection:
