@@ -10,7 +10,8 @@ class MyApp extends React.Component {
         super(props);
         this.state = { 
             mode: 0,
-            session: null
+            session: null,
+            assignment: null
         };
 
         this.connection = new autobahn.Connection({
@@ -33,24 +34,40 @@ class MyApp extends React.Component {
         this.setState({mode: state});
     }
 
+    chooseAssigment(name) {
+        console.log(name);
+        this.setState({assignment: name});
+    }
+
     render() {
         if (this.state.session == null) {
             return <div>Could not open autobahn session</div>;
         }
         else {
-            const products = this.props.products[this.state.mode];
-            var list = this.state.mode == 2 ?
-                               <OrderList items={products} session={this.state.session}/> : 
-                               <StockList items={products} />;
-            return  <div>
-                        <Menu items={this.props.menus} handleChange={(index)=>this.handleChange(index)} />
-                        {list}
-                    </div>;
+            if (this.state.assignment == null) {
+                let choices = ["Stock"].concat(this.props.bars).map(
+                    (name) => <button onClick={() => this.chooseAssigment(name)}>{name}</button>
+                );
+                return <div>Choose your assignment<br />{choices}</div>
+            }
+            else if (this.state.assignment == "Stock") {
+                return <div>TBD</div>
+            }
+            else {
+                const products = this.props.products[this.state.mode];
+                let list = this.state.mode == 2 ?
+                                   <OrderList items={products} session={this.state.session}/> : 
+                                   <StockList items={products} />;
+                return  <div>
+                            <Menu items={this.props.menus} handleChange={(index)=>this.handleChange(index)} />
+                            {list}
+                        </div>;
+            }
         }
     }
 };
 
-var listItems = [
+let listItems = [
         [
             { name: 'Kriek', quantity: 220 }
         ],
@@ -69,6 +86,8 @@ var listItems = [
     ];
 
 
+let listBars = ['Bar 1', 'Bar 2'];
+
 ReactDOM.render(
-    <MyApp menus={['Home', 'Stocks', 'Commandes']} products={listItems} />,
+    <MyApp bars={listBars} menus={['Home', 'Stocks', 'Commandes']} products={listItems} />,
     document.getElementById('myapp'))
