@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import autobahn from 'autobahn';
-import ProductList from './components/ProductList.jsx';
-import BarOrder from './components/BarOrder.jsx';
-import Menu from './components/Menu.jsx';
 import BarApp from './components/BarApp.jsx';
+import StockApp from './components/StockApp.jsx';
 
 class MyApp extends React.Component {
     constructor(props){
@@ -60,7 +58,10 @@ class MyApp extends React.Component {
             }
             // stock app
             else if (this.state.assignment == "Stock") {
-                return <div>TBD</div>
+                return <div><StockApp menus={this.props.menus}
+                                      products={this.props.products}
+                                      session={this.props.session}
+                                      backClick={() => this.chooseAssigment(null)} /></div>
             }
             // bar app
             else {
@@ -68,7 +69,7 @@ class MyApp extends React.Component {
                                     assignment={this.state.assignment}
                                     products={this.props.products}
                                     session={this.state.session}
-                                    backClick={() => this.chooseAssigment(null) } /></div>
+                                    backClick={() => this.chooseAssigment(null)} /></div>
             }
         }
     }
