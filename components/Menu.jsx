@@ -7,6 +7,7 @@ export default class Menu extends React.Component {
     }
 
     clicked(index){
+        this.props.menuClick(index);
         this.setState({focused: index});
     }
 
@@ -22,7 +23,6 @@ export default class Menu extends React.Component {
         
                     return <li className={style} onClick={()=>{
 
-                        this.props.handleChange(index);
                         this.clicked(index);
 
                     }}>{m}</li>;

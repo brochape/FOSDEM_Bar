@@ -8,7 +8,7 @@ export default class ProductList extends React.Component {
 
     render() {
 
-        var products = this.props.items.map((s,i) =>{
+        var products = this.props.products.map((s,i) =>{
             return <Product name={s.name} quantity={s.quantity} />;
         });
 

@@ -5,11 +5,11 @@ export default class BarOrder extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            products: this.props.items.map((s,i) => <Product ref={i}
-                                                             name={s.name} 
-                                                             quantity={s.quantity}
-                                                             inc={true}
-                                                             dec={true} />)
+            products: this.props.products.map((s,i) => <Product ref={i}
+                                                                name={s.name} 
+                                                                quantity={s.quantity}
+                                                                inc={true}
+                                                                dec={true} />)
         }
     }
 
@@ -17,7 +17,7 @@ export default class BarOrder extends React.Component{
         var products = Object.keys(this.refs).map((key) => this.refs[key].values());
         products = products.filter((prod) => prod.quantity != 0);
         if (products.length > 0) {
-            this.props.session.call('order.create', [{'from': this.props.bar, 'products': products}])
+            this.props.session.call('order.create', [{from: this.props.assignment, products: products}])
             Object.keys(this.refs).map((key) => this.refs[key].reset());
         }
     }

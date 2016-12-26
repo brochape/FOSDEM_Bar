@@ -4,12 +4,12 @@ import autobahn from 'autobahn';
 import ProductList from './components/ProductList.jsx';
 import BarOrder from './components/BarOrder.jsx';
 import Menu from './components/Menu.jsx';
+import BarApp from './components/BarApp.jsx';
 
 class MyApp extends React.Component {
     constructor(props){
         super(props);
-        this.state = { 
-            mode: 0,
+        this.state = {
             session: null,
             server_running: false,
             assignment: null
@@ -31,14 +31,10 @@ class MyApp extends React.Component {
         }
 
         this.connection.onclose = (r, d) => {
-
+            this.setState({session: null})
         }
 
         this.connection.open()
-    }
-
-    handleChange(state) {
-        this.setState({mode: state});
     }
 
     chooseAssigment(name) {
@@ -46,57 +42,48 @@ class MyApp extends React.Component {
     }
 
     render() {
+        // session not working
         if (this.state.session == null) {
             return <div>Could not open autobahn session</div>;
         }
+        // server not running
         else if (this.state.server_running == false) {
             return <div>Server component is not running</div>;
         }
         else {
+            // choose an assignment
             if (this.state.assignment == null) {
                 let choices = ["Stock"].concat(this.props.bars).map(
                     (name) => <button onClick={() => this.chooseAssigment(name)}>{name}</button>
                 );
                 return <div>Choose your assignment<br />{choices}</div>
             }
+            // stock app
             else if (this.state.assignment == "Stock") {
                 return <div>TBD</div>
             }
+            // bar app
             else {
-                const products = this.props.products[this.state.mode];
-                let list = this.state.mode == 2 ?
-                                   <BarOrder bar={this.state.assignment} items={products} session={this.state.session}/> : 
-                                   <ProductList items={products} />;
-                return  <div>
-                            <Menu items={this.props.menus} handleChange={(index)=>this.handleChange(index)} />
-                            {list}
-                        </div>;
+                return <div><BarApp menus={this.props.menus} 
+                                    assignment={this.state.assignment}
+                                    products={this.props.products}
+                                    session={this.state.session}
+                                    backClick={() => this.chooseAssigment(null) } /></div>
             }
         }
     }
 };
 
-let listItems = [
-        [
-            { name: 'Kriek', quantity: 220 }
-        ],
-        [
-            { name: 'Jupiler', quantity: 300 },
-            { name: 'Orval', quantity: 400 },
-            { name: 'Barbar', quantity: 250 },
-            { name: 'Kriek', quantity: 220 }
-        ],
-        [
-            { name: 'Jupiler', quantity: 0 },
-            { name: 'Orval', quantity: 0 },
-            { name: 'Barbar', quantity: 0 },
-            { name: 'Kriek', quantity: 0 }
-        ]
-    ];
+let listProducts = [
+    { name: 'Jupiler', quantity: 300 },
+    { name: 'Orval', quantity: 400 },
+    { name: 'Barbar', quantity: 250 },
+    { name: 'Kriek', quantity: 220 }
+];
 
 
 let listBars = ['Bar 1', 'Bar 2'];
 
 ReactDOM.render(
-    <MyApp bars={listBars} menus={['Home', 'Stocks', 'Commandes']} products={listItems} />,
+    <MyApp bars={listBars} menus={['Home', 'Stocks', 'Commandes']} products={listProducts} />,
     document.getElementById('myapp'))
