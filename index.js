@@ -56,7 +56,7 @@ class MyApp extends React.Component {
             else {
                 const products = this.props.products[this.state.mode];
                 let list = this.state.mode == 2 ?
-                                   <OrderList items={products} session={this.state.session}/> : 
+                                   <OrderList bar={this.state.assignment} items={products} session={this.state.session}/> : 
                                    <StockList items={products} />;
                 return  <div>
                             <Menu items={this.props.menus} handleChange={(index)=>this.handleChange(index)} />
