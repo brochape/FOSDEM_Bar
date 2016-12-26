@@ -16,8 +16,10 @@ export default class OrderList extends React.Component{
     handleClick() {
         var products = Object.keys(this.refs).map((key) => this.refs[key].values());
         products = products.filter((prod) => prod.quantity != 0);
-        this.props.session.call('order.create', [{'from': this.props.bar, 'products': products}])
-        Object.keys(this.refs).map((key) => this.refs[key].reset());
+        if (products.length > 0) {
+            this.props.session.call('order.create', [{'from': this.props.bar, 'products': products}])
+            Object.keys(this.refs).map((key) => this.refs[key].reset());
+        }
     }
 
     render() {
