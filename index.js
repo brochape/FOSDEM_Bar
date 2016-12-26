@@ -34,14 +34,19 @@ class MyApp extends React.Component {
     }
 
     render() {
-        const products = this.props.products[this.state.mode];
-        var list = this.state.mode == 2 ?
-                           <OrderList items={products} session={this.state.session}/> : 
-                           <StockList items={products} />;
-        return  <div>
-                    <Menu items={this.props.menus} handleChange={(index)=>this.handleChange(index)} />
-                    {list}
-                </div>;
+        if (this.state.session == null) {
+            return <div>Could not open autobahn session</div>;
+        }
+        else {
+            const products = this.props.products[this.state.mode];
+            var list = this.state.mode == 2 ?
+                               <OrderList items={products} session={this.state.session}/> : 
+                               <StockList items={products} />;
+            return  <div>
+                        <Menu items={this.props.menus} handleChange={(index)=>this.handleChange(index)} />
+                        {list}
+                    </div>;
+        }
     }
 };
 
