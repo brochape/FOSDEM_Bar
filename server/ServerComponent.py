@@ -55,20 +55,16 @@ class ServerComponent(ApplicationSession):
                     await connection.execute(order_lines.insert()
                                                         .values(**product)
                                                         .returning())
-                    del product['order_id']
-                del order['id']
                 print("Created order", order)
-        finished_orders = await self._get_finished_orders()
-        self.publish(u'order.oncreate', finished_orders)
+        await self._publish_finished_orders()
 
     async def order_finish(self, order):
         async with self.engine.acquire() as connection:
-            connection.execute(orders
-                               .update()
-                               .where(orders.c.id == order['id'])
-                               .values(finished=True))
-            self.publish(u'order.onfinish', order)
-            print("Finished order", order)
+            await connection.execute(orders
+                                     .update()
+                                     .where(orders.c.id == order['id'])
+                                     .values(finished=True))
+        await self._publish_finished_orders()
 
     async def stock_change(self, changes):
         async with self.engine.acquire() as connection:
@@ -91,7 +87,7 @@ class ServerComponent(ApplicationSession):
         await self.register(self.order_create, u'order.create')
         await self.register(self.order_finish, u'order.finish')
         await self.register(self.stock_change, u'stock.change')
-        await self.register(self.stock_initial, u'stock_initial')
+        await self.register(self.stock_initial, u'stock.initial')
         await self.register(self.finished_orders_initial, u'orders.finished.initial')
         self.engine = await create_engine(user='fosdem',
                                           database='fosdem')
@@ -99,6 +95,10 @@ class ServerComponent(ApplicationSession):
             await create_table(connection, orders)
             await create_table(connection, order_lines)
             await create_table(connection, stocks)
+
+    async def _publish_finished_orders(self):
+        finished_orders = await self._get_finished_orders()
+        self.publish(u'orders.finished.onchange', finished_orders)
 
     async def _get_stock(self):
         async with self.engine.acquire() as connection:

@@ -22,7 +22,7 @@ class MyApp extends React.Component {
         this.connection.onopen = (s, d) => {
             this.setState({session: s});
             try {
-                this.state.session.call('stock_initial', []).then((res) => this.setState({server_running: true,
+                this.state.session.call('stock.initial', []).then((res) => this.setState({server_running: true,
                                                                                           products: res}));
             }
             catch (e) { // If error thrown => test_session function does not exist => server not running
