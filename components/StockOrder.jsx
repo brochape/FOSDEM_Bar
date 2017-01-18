@@ -1,19 +1,19 @@
 import React from 'react';
-import Product from './Product.jsx';
+import ProductList from './ProductList.jsx';
+import Order from './Order.jsx'
 
 export default class StockOrder extends React.Component{
     constructor(props) {
         super(props);
+        this.state = {
+            orders: [{from: 'bar1', products: [{product: 'jupiler', quantity: 10}, {product: 'leffe', quantity: 5}]}]
+        }
     }
 
     render() {
-        let products = this.props.order.products.map((s,i) => <Product product={s.product} 
-                                                                       quantity={s.quantity} />)
+        let orders = this.state.orders.map((order) => <Order order={order} />)
         return <div>
-                    <h1>Order from {this.props.order.from}</h1>
-                    <div id = "products" >
-                        {products}
-                    </div>
+                    {orders}
                 </div>;
     }
 }

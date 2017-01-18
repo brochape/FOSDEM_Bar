@@ -1,6 +1,7 @@
 import React from 'react';
 import ProductList from './ProductList.jsx';
 import Menu from './Menu.jsx';
+import StockOrder from './StockOrder.jsx';
 
 export default class BarApp extends React.Component{
     constructor(props) {
@@ -18,7 +19,7 @@ export default class BarApp extends React.Component{
     render() {
         var content = null
         if (this.state.mode == 1) {
-            //content = <BarOrder assignment={this.props.assignment} products={products} session={this.props.session}/>
+            content = <StockOrder session={this.props.session}/>
         }
         else {
             content = <ProductList products={this.props.products} />;
