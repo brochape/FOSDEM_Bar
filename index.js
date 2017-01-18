@@ -10,6 +10,7 @@ class MyApp extends React.Component {
         this.state = {
             session: null,
             server_running: false,
+            products: {},
             assignment: null
         };
 
@@ -21,10 +22,12 @@ class MyApp extends React.Component {
         this.connection.onopen = (s, d) => {
             this.setState({session: s});
             try {
-                this.state.session.call('ping_server', []).then((res) => this.setState({server_running: true}));
+                this.state.session.call('stock_initial', []).then((res) => this.setState({server_running: true,
+                                                                                          products: res}));
             }
             catch (e) { // If error thrown => test_session function does not exist => server not running
-                this.setState({server_running: false});
+                this.setState({server_running: false,
+                               products: {}});
             }
         }
 
@@ -59,7 +62,7 @@ class MyApp extends React.Component {
             // stock app
             else if (this.state.assignment == "Stock") {
                 return <div><StockApp menus={this.props.menus}
-                                      products={this.props.products}
+                                      products={this.state.products}
                                       session={this.props.session}
                                       backClick={() => this.chooseAssigment(null)} /></div>
             }
@@ -67,7 +70,7 @@ class MyApp extends React.Component {
             else {
                 return <div><BarApp menus={this.props.menus} 
                                     assignment={this.state.assignment}
-                                    products={this.props.products}
+                                    products={this.state.products}
                                     session={this.state.session}
                                     backClick={() => this.chooseAssigment(null)} /></div>
             }

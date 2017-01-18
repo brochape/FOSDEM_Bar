@@ -72,8 +72,31 @@ class ServerComponent(ApplicationSession):
     async def stock_change(self, changes):
         async with self.engine.acquire() as connection:
             connection.execute(stocks.insert().values(**changes))
-            stocks_by_product = await (self
-                                       .connection
+        stocks_by_product = await self._get_stock()
+        self.publish(u'stock.onchange', stocks_by_product)
+        print("New stock", stocks_by_product)
+
+    async def stock_initial(self):
+        stocks_by_product = await self._get_stock()
+        print("Initial stock", stocks_by_product)
+        return stocks_by_product
+
+    async def onJoin(self, details):
+        await self.register(self.order_create, u'order.create')
+        await self.register(self.order_finish, u'order.finish')
+        await self.register(self.stock_change, u'stock.change')
+        await self.register(self.stock_initial, u'stock_initial')
+        self.engine = await create_engine(user='fosdem',
+                                          database='fosdem')
+        async with self.engine.acquire() as connection:
+            await create_table(connection, orders)
+            await create_table(connection, order_lines)
+            await create_table(connection, stocks)
+
+    async def _get_stock(self):
+        print("get_stock")
+        async with self.engine.acquire() as connection:
+            stocks_by_product = await (connection
                                        .execute(select([
                                                        stocks.c.product,
                                                        func
@@ -82,24 +105,7 @@ class ServerComponent(ApplicationSession):
                                                        ])
                                                 .group_by(stocks.c.product)))
             stocks_by_product = [dict(r) for r in stocks_by_product]
-            self.publish(u'stock.onchange', stocks_by_product)
-            print("New stock", stocks_by_product)
-
-    async def ping_server(self):
-        return True
-
-    async def onJoin(self, details):
-        await self.register(self.order_create, u'order.create')
-        await self.register(self.order_finish, u'order.finish')
-        await self.register(self.stock_change, u'stock.change')
-        await self.register(self.ping_server, u'ping_server')
-        self.engine = await create_engine(user='fosdem',
-                                          database='fosdem')
-        async with self.engine.acquire() as connection:
-            await create_table(connection, orders)
-            await create_table(connection, order_lines)
-            await create_table(connection, stocks)
-
+        return stocks_by_product
 
 runner = ApplicationRunner(url=u"ws://localhost:8080/ws", realm=u"realm1")
 runner.run(ServerComponent)
