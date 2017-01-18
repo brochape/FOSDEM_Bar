@@ -85,12 +85,12 @@ async def db_select_stock(connection):
     stocks_by_product = [dict(r) for r in stocks_by_product]
     return stocks_by_product
 
-async def db_select_finished_orders(connection):
-    finished_orders = await connection.execute(orders
+async def db_select_pending_orders(connection):
+    pending_orders = await connection.execute(orders
                                                .select()
                                                .where(orders.c.finished == False)) # NOQA
     results = []
-    for r in finished_orders:
+    for r in pending_orders:
         r = dict(r)
         lines = await connection.execute(select([order_lines.c.product, order_lines.c.quantity])
                                          .where(order_lines.c.order_id == r['id']))
