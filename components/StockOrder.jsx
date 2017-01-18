@@ -6,8 +6,12 @@ export default class StockOrder extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            orders: [{id: 5, from: 'bar1', products: [{product: 'jupiler', quantity: 10}, {product: 'leffe', quantity: 5}]}]
+            orders: []
         }
+        this.props.session.call('orders.finished.initial', []).then((orders) => 
+            this.setState({
+                orders: orders
+            }))
     }
 
     render() {
