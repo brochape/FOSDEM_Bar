@@ -122,7 +122,7 @@ class ServerComponent(ApplicationSession):
             for r in finished_orders:
                 r = dict(r)
                 lines = await connection.execute(select([order_lines.c.product, order_lines.c.quantity])
-                                                 .where(order_lines.c.id == r['id']))
+                                                 .where(order_lines.c.order_id == r['id']))
                 r['products'] = [dict(l) for l in lines]
                 results.append(r)
         return results
