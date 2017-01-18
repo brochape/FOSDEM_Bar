@@ -94,14 +94,13 @@ class ServerComponent(ApplicationSession):
             await create_table(connection, stocks)
 
     async def _get_stock(self):
-        print("get_stock")
         async with self.engine.acquire() as connection:
             stocks_by_product = await (connection
                                        .execute(select([
                                                        stocks.c.product,
                                                        func
                                                        .sum(stocks.c.quantity)
-                                                       .label("total")
+                                                       .label("quantity")
                                                        ])
                                                 .group_by(stocks.c.product)))
             stocks_by_product = [dict(r) for r in stocks_by_product]

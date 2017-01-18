@@ -181,7 +181,7 @@ sup  { font-size: 36px; font-weight: 100; line-height: 55px; }
 
 /*---------------------------*/
 
-#productName {
+.productName {
     text-align: right;
     font-size: 100;
 }

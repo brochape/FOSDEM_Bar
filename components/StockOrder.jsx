@@ -7,7 +7,7 @@ export default class StockOrder extends React.Component{
     }
 
     render() {
-        let products = this.props.order.products.map((s,i) => <Product name={s.name} 
+        let products = this.props.order.products.map((s,i) => <Product product={s.product} 
                                                                        quantity={s.quantity} />)
         return <div>
                     <h1>Order from {this.props.order.from}</h1>

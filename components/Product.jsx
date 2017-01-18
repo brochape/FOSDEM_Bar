@@ -19,7 +19,7 @@ export default class Product extends React.Component {
 
     constructor(props){
         super(props);
-        this.state = {quantity: 0};
+        this.state = {quantity: this.props.quantity};
     }
 
 
@@ -35,7 +35,7 @@ export default class Product extends React.Component {
 
     values() {
         return {
-            product: this.props.name,
+            product: this.props.product,
             quantity: this.state.quantity
         };
     }
@@ -53,8 +53,8 @@ export default class Product extends React.Component {
             buttons.push(<VeryLargeButton right onClick={() => this.dec()}>-</VeryLargeButton>);
         }
         return  <div>
-                    <div id="productname">
-                        {this.props.name} <b>{this.state.quantity}</b>
+                    <div className="productname">
+                        {this.props.product} <b>{this.state.quantity}</b>
                     </div>
                     <div className="vlg">
                         {buttons}

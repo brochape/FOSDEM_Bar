@@ -78,16 +78,8 @@ class MyApp extends React.Component {
     }
 };
 
-let listProducts = [
-    { name: 'Jupiler', quantity: 300 },
-    { name: 'Orval', quantity: 400 },
-    { name: 'Barbar', quantity: 250 },
-    { name: 'Kriek', quantity: 220 }
-];
-
-
 let listBars = ['Bar 1', 'Bar 2'];
 
 ReactDOM.render(
-    <MyApp bars={listBars} menus={['Home', 'Stocks', 'Commandes']} products={listProducts} />,
+    <MyApp bars={listBars} menus={['Home', 'Stocks', 'Commandes']} />,
     document.getElementById('myapp'))
