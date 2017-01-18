@@ -22,10 +22,8 @@ class MyApp extends React.Component {
         this.connection.onopen = (s, d) => {
             this.setState({session: s});
             try {
-                this.state.session.call('stock.initial', []).then((stock) => 
-                    this.setState({server_running: true, products: stock}));
-                this.state.session.subscribe('stock.onchange', (stock) => 
-                    this.setState({products: stock[0]}))
+                this.state.session.call('stock.initial', []).then((products) => this.updateProducts(products))
+                this.state.session.subscribe('stock.onchange', (products) => this.updateProducts(products[0]))
             }
             catch (e) { // If error thrown => test_session function does not exist => server not running
                 this.setState({server_running: false,
@@ -38,6 +36,10 @@ class MyApp extends React.Component {
         }
 
         this.connection.open()
+    }
+
+    updateProducts(products) {
+        this.setState({server_running: true, products: products})
     }
 
     chooseAssigment(name) {
