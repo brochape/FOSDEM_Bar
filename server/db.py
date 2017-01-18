@@ -82,7 +82,7 @@ async def db_select_stock(connection):
                                                .label("quantity")
                                                ])
                                         .group_by(stocks.c.product)))
-    stocks_by_product = [dict(r) for r in stocks_by_product]
+    stocks_by_product = [dict(r) for r in stocks_by_product if r['quantity'] > 0]
     return stocks_by_product
 
 async def db_select_pending_orders(connection):
