@@ -106,5 +106,11 @@ class ServerComponent(ApplicationSession):
             stocks_by_product = [dict(r) for r in stocks_by_product]
         return stocks_by_product
 
+    async def _get_finished_orders(self):
+        async with self.engine.acquire() as connection:
+            finished_orders = await connection.execute(orders.select().where(orders.c.finished == False)) # NOQA
+        return [dict(r) for r in finished_orders]
+
+
 runner = ApplicationRunner(url=u"ws://localhost:8080/ws", realm=u"realm1")
 runner.run(ServerComponent)
