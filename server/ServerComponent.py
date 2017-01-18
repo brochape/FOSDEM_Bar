@@ -57,8 +57,9 @@ class ServerComponent(ApplicationSession):
                                                         .returning())
                     del product['order_id']
                 del order['id']
-                self.publish(u'order.oncreate', order)
                 print("Created order", order)
+        finished_orders = await self._get_finished_orders()
+        self.publish(u'order.oncreate', finished_orders)
 
     async def order_finish(self, order):
         async with self.engine.acquire() as connection:

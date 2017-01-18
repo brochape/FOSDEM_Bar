@@ -8,10 +8,14 @@ export default class StockOrder extends React.Component{
         this.state = {
             orders: []
         }
-        this.props.session.call('orders.finished.initial', []).then((orders) => 
-            this.setState({
-                orders: orders
-            }))
+        this.props.session.call('orders.finished.initial', []).then((orders) => this.onOrdersChange(orders))
+        this.props.session.subscribe('order.oncreate', (orders) => this.onOrdersChange(orders[0]))
+    }
+
+    onOrdersChange(orders) {
+        this.setState({
+            orders: orders
+        })
     }
 
     render() {
