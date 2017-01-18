@@ -70,7 +70,7 @@ async def db_modify_stock(connection, order):
         await connection.execute(stocks
                                  .insert()
                                  .values({'product': product['product'],
-                                          'quantity': product['quantity']}))
+                                          'quantity': -product['quantity']}))
     return True
 
 async def db_select_stock(connection):
