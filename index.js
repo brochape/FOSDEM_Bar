@@ -62,7 +62,7 @@ class MyApp extends React.Component {
             // stock app
             else if (this.state.assignment == "Stock") {
                 return <div><StockApp products={this.state.products}
-                                      session={this.props.session}
+                                      session={this.state.session}
                                       backClick={() => this.chooseAssigment(null)} /></div>
             }
             // bar app

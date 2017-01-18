@@ -8,7 +8,7 @@ export default class Order extends React.Component {
     }
 
     finishOrder() {
-
+        this.props.session.call('order.finish', [this.props.order])
     }
 
     render(){
