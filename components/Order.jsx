@@ -8,16 +8,14 @@ export default class Order extends React.Component {
     }
 
     finishOrder() {
-        
+
     }
 
     render(){
         return  <div>
-                    {this.props.order.from}
+                    <h1>Order from : {this.props.order.from}</h1>
                     <ProductList products={this.props.order.products} />
-                    <div className="vlg">
-                        <VeryLargeButton right onClick={() => this.finishOrder()}>Finish order</VeryLargeButton>
-                    </div>
+                    <button id="order" onClick={() => this.finishOrder()}>Finish Order</button>
                 </div>;
     }
 
