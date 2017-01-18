@@ -61,15 +61,13 @@ class MyApp extends React.Component {
             }
             // stock app
             else if (this.state.assignment == "Stock") {
-                return <div><StockApp menus={this.props.menus}
-                                      products={this.state.products}
+                return <div><StockApp products={this.state.products}
                                       session={this.props.session}
                                       backClick={() => this.chooseAssigment(null)} /></div>
             }
             // bar app
             else {
-                return <div><BarApp menus={this.props.menus} 
-                                    assignment={this.state.assignment}
+                return <div><BarApp assignment={this.state.assignment}
                                     products={this.state.products}
                                     session={this.state.session}
                                     backClick={() => this.chooseAssigment(null)} /></div>
@@ -81,5 +79,5 @@ class MyApp extends React.Component {
 let listBars = ['Bar 1', 'Bar 2'];
 
 ReactDOM.render(
-    <MyApp bars={listBars} menus={['Home', 'Stocks', 'Commandes']} />,
+    <MyApp bars={listBars} />,
     document.getElementById('myapp'))
