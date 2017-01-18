@@ -46,13 +46,14 @@ class MyApp extends React.Component {
     }
 
     render() {
+        var content = null
         // session not working
         if (this.state.session == null) {
-            return <div>Could not open autobahn session</div>;
+            content = "Could not open autobahn session"
         }
         // server not running
         else if (this.state.server_running == false) {
-            return <div>Server component is not running</div>;
+            content = "Server component is not running"
         }
         else {
             // choose an assignment
@@ -60,22 +61,27 @@ class MyApp extends React.Component {
                 let choices = ["Stock"].concat(this.props.bars).map(
                     (name) => <button onClick={() => this.chooseAssigment(name)}>{name}</button>
                 );
-                return <div>Choose your assignment<br />{choices}</div>
+                content = <div>Choose your assignment<br />{choices}</div>
             }
             // stock app
             else if (this.state.assignment == "Stock") {
-                return <div><StockApp products={this.state.products}
+                content = <StockApp products={this.state.products}
                                       session={this.state.session}
-                                      backClick={() => this.chooseAssigment(null)} /></div>
+                                      backClick={() => this.chooseAssigment(null)} />
             }
             // bar app
             else {
-                return <div><BarApp assignment={this.state.assignment}
+                content = <BarApp assignment={this.state.assignment}
                                     products={this.state.products}
                                     session={this.state.session}
-                                    backClick={() => this.chooseAssigment(null)} /></div>
+                                    backClick={() => this.chooseAssigment(null)} />
             }
         }
+        var assignment = ""
+        if (this.state.assignment != null) {
+            assignment = "You are assigned to " + this.state.assignment
+        }
+        return <div><h1>{assignment}</h1>{content}</div>
     }
 };
 
