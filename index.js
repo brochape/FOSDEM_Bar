@@ -10,7 +10,7 @@ class MyApp extends React.Component {
         this.state = {
             session: null,
             server_running: false,
-            products: {},
+            products: [],
             assignment: null
         };
 
@@ -22,8 +22,10 @@ class MyApp extends React.Component {
         this.connection.onopen = (s, d) => {
             this.setState({session: s});
             try {
-                this.state.session.call('stock.initial', []).then((res) => this.setState({server_running: true,
-                                                                                          products: res}));
+                this.state.session.call('stock.initial', []).then((stock) => 
+                    this.setState({server_running: true, products: stock}));
+                this.state.session.subscribe('stock.onchange', (stock) => 
+                    this.setState({products: stock[0]}))
             }
             catch (e) { // If error thrown => test_session function does not exist => server not running
                 this.setState({server_running: false,
