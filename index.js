@@ -26,8 +26,7 @@ class MyApp extends React.Component {
                 this.state.session.subscribe('stock.onchange', (products) => this.updateProducts(products[0]))
             }
             catch (e) { // If error thrown => test_session function does not exist => server not running
-                this.setState({server_running: false,
-                               products: {}});
+                this.setState({server_running: false});
             }
         }
 
