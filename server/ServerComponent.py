@@ -81,11 +81,17 @@ class ServerComponent(ApplicationSession):
         print("Initial stock", stocks_by_product)
         return stocks_by_product
 
+    async def finished_orders_initial(self):
+        finished_orders = await self._get_finished_orders()
+        print("Initial orders", finished_orders)
+        return finished_orders
+
     async def onJoin(self, details):
         await self.register(self.order_create, u'order.create')
         await self.register(self.order_finish, u'order.finish')
         await self.register(self.stock_change, u'stock.change')
         await self.register(self.stock_initial, u'stock_initial')
+        await self.register(self.finished_orders_initial, u'orders.finished.initial')
         self.engine = await create_engine(user='fosdem',
                                           database='fosdem')
         async with self.engine.acquire() as connection:
@@ -108,8 +114,17 @@ class ServerComponent(ApplicationSession):
 
     async def _get_finished_orders(self):
         async with self.engine.acquire() as connection:
-            finished_orders = await connection.execute(orders.select().where(orders.c.finished == False)) # NOQA
-        return [dict(r) for r in finished_orders]
+            finished_orders = await connection.execute(orders
+                                                       .select()
+                                                       .where(orders.c.finished == False)) # NOQA
+            results = []
+            for r in finished_orders:
+                r = dict(r)
+                lines = await connection.execute(select([order_lines.c.product, order_lines.c.quantity])
+                                                 .where(order_lines.c.id == r['id']))
+                r['products'] = [dict(l) for l in lines]
+                results.append(r)
+        return results
 
 
 runner = ApplicationRunner(url=u"ws://localhost:8080/ws", realm=u"realm1")
