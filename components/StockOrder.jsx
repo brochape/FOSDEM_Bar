@@ -1,6 +1,6 @@
 import React from 'react';
 import ProductList from './ProductList.jsx';
-import Order from './Order.jsx'
+import OrderList from './OrderList.jsx';
 
 export default class StockOrder extends React.Component{
     constructor(props) {
@@ -13,15 +13,14 @@ export default class StockOrder extends React.Component{
     }
 
     onOrdersChange(orders) {
-        this.setState({
-            orders: orders
-        })
+        orders.forEach((order) => this.refs[order.bar].add_product(order))
     }
 
     render() {
-        let orders = this.state.orders.map((order) => <Order order={order} session={this.props.session} />)
+        let bars = this.props.bars.map((bar) => 
+            <OrderList ref={bar} bar={bar} products={[]} session={this.props.session} />)
         return <div>
-                    {orders}
+                    {bars}
                 </div>;
     }
 }

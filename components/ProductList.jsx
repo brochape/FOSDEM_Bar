@@ -10,11 +10,8 @@ export default class ProductList extends React.Component {
         var products = this.props.products.map((prod) => 
             <Product product={prod.product} quantity={prod.quantity} />);
 
-        return <div>
-                    <h1>Beer List</h1>
-                    <div id = "products" >
-                        {products}
-                    </div>
-                </div>;
+        return  <div id="products">
+                    {products}
+                </div>
     }
 };
