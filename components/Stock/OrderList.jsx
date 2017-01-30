@@ -10,11 +10,22 @@ export default class OrderList extends React.Component {
 	}
 
 	add_order(order) {
-		let orders = this.state.orders;
-		orders.push(order)
+		let orders = []
+		let exists = false
 		this.setState({
-			orders: orders
+			orders: this.state.orders.map((o) => {
+						if (o.id == order.id) {
+							o.finished = order.finished
+							exists = true
+						}
+						return o
+					})
 		})
+		if (!exists) {
+			this.setState({
+				orders: this.state.orders.concat([order])
+			})
+		}
 	}
 
 	onClick(order) {
