@@ -33,10 +33,10 @@ export default class Product extends React.Component {
     render(){
         var buttons = [];
         if (this.props.inc) {
-            buttons.push(<VeryLargeButton left onClick={() => this.inc()}>+</VeryLargeButton>);
+            buttons.push(<VeryLargeButton key="inc" left onClick={() => this.inc()}>+</VeryLargeButton>);
         }
         if (this.props.dec) {
-            buttons.push(<VeryLargeButton right onClick={() => this.dec()}>-</VeryLargeButton>);
+            buttons.push(<VeryLargeButton key="dec" right onClick={() => this.dec()}>-</VeryLargeButton>);
         }
         return  <div>
                     <div className="productname">

@@ -1,5 +1,5 @@
 import React from 'react';
-import ProductList from './ProductList.jsx';
+import ProductList from '../shared/ProductList.jsx';
 import OrderList from './OrderList.jsx';
 
 export default class StockOrder extends React.Component{
@@ -18,7 +18,7 @@ export default class StockOrder extends React.Component{
 
     render() {
         let bars = this.props.bars.map((bar) => 
-            <OrderList ref={bar} bar={bar} products={[]} session={this.props.session} />)
+            <OrderList key={bar} ref={bar} bar={bar} products={[]} session={this.props.session} />)
         return <div>
                     {bars}
                 </div>;

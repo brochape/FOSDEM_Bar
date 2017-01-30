@@ -1,7 +1,7 @@
 import React from 'react';
 import autobahn from 'autobahn';
-import BarApp from './BarApp.jsx';
-import StockApp from './StockApp.jsx';
+import BarApp from './Bar/BarApp.jsx';
+import StockApp from './Stock/StockApp.jsx';
 
 export default class MyApp extends React.Component {
     constructor(props){
@@ -58,7 +58,7 @@ export default class MyApp extends React.Component {
             // choose an assignment
             if (this.state.assignment == null) {
                 let choices = ["Stock"].concat(this.props.bars).map(
-                    (name) => <button onClick={() => this.chooseAssigment(name)}>{name}</button>
+                    (name) => <button key={name} onClick={() => this.chooseAssigment(name)}>{name}</button>
                 );
                 content = <div>Choose your assignment<br />{choices}</div>
             }

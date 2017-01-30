@@ -5,7 +5,8 @@ export default class BarOrder extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            products: this.props.products.map((s,i) => <Product ref={i}
+            products: this.props.products.map((s,i) => <Product key={i}
+                                                                ref={i}
                                                                 product={s.product} 
                                                                 quantity={0}
                                                                 inc={true}

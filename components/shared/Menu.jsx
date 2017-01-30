@@ -21,7 +21,7 @@ export default class Menu extends React.Component {
                         style = 'focused';
                     }
         
-                    return <li className={style} onClick={()=>{
+                    return <li key={m} className={style} onClick={()=>{
 
                         this.clicked(index);
 

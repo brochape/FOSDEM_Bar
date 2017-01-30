@@ -23,9 +23,9 @@ export default class OrderList extends React.Component {
 
 	render() {
 		let products = this.state.products.map((prod) => 
-			<div>
+			<div key={prod.id}>
 				<Product product={prod.product} quantity={prod.quantity} />
-				<input type="checkbox" checked={prod.finished} right onClick={() => this.onClick(prod)} />
+				<input type="checkbox" checked={prod.finished} onClick={() => this.onClick(prod)} />
 			</div>)
 		return 	<div>
 					<h2>{this.props.bar}</h2>
