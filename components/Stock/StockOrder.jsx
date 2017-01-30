@@ -8,18 +8,23 @@ export default class StockOrder extends React.Component{
         this.state = {
             orders: []
         }
-        this.props.session.call('orders.pending.initial', []).then((orders) => this.onOrdersChange(orders))
-        this.props.session.subscribe('orders.pending.onchange', (orders) => this.onOrdersChange(orders[0]))
+        this.props.session.call('orders.pending.initial', []).then((orders) => this.initOrders(orders))
+        this.props.session.subscribe('orders.onchange', (order) => this.onOrdersChange(order[0]))
     }
 
-    onOrdersChange(orders) {
-        orders.forEach((order) => this.refs[order.bar].add_product(order))
+    initOrders(orders) {
+        orders.forEach((order) => this.refs[order.bar].add_order(order))
+    }
+
+    onOrdersChange(order) {
+        console.log(order)
+        this.refs[order.bar].add_order(order)
     }
 
     render() {
         let bars = this.props.bars.map((bar) => 
-            <OrderList key={bar} ref={bar} bar={bar} products={[]} session={this.props.session} />)
-        return <div>
+            <OrderList key={bar} ref={bar} bar={bar} orders={[]} session={this.props.session} />)
+        return  <div>
                     {bars}
                 </div>;
     }

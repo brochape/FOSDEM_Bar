@@ -5,24 +5,24 @@ export default class OrderList extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			products: this.props.products
+			orders: this.props.orders
 		}
 	}
 
-	add_product(product) {
-		let products = this.state.products;
-		products.push(product)
+	add_order(order) {
+		let orders = this.state.orders;
+		orders.push(order)
 		this.setState({
-			products: products
+			orders: orders
 		})
 	}
 
-	onClick(product) {
-		this.props.session.call('order.finish', [product])
+	onClick(order) {
+		this.props.session.call('order.finish', [order])
 	}
 
 	render() {
-		let products = this.state.products.map((prod) => 
+		let orders = this.state.orders.map((prod) => 
 			<div key={prod.id}>
 				<Product product={prod.product} quantity={prod.quantity} />
 				<input type="checkbox" checked={prod.finished} onClick={() => this.onClick(prod)} />
@@ -30,7 +30,7 @@ export default class OrderList extends React.Component {
 		return 	<div>
 					<h2>{this.props.bar}</h2>
 					<div id="products">
-						{products}
+						{orders}
 					</div>
 				</div>
 	}

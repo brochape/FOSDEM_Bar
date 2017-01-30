@@ -15,15 +15,16 @@ class ServerComponent(ApplicationSession):
         async with self.engine.acquire() as connection:
             if await db_insert_order(connection, order):
                 print("Created order", order)
-        await self._publish_pending_orders()
+                await self._publish_order(order)
 
     async def order_finish(self, order):
         async with self.engine.acquire() as connection:
             if (await db_finish_order(connection, order) and
                await db_modify_stock(connection, order)):
                 print("Finished order", order)
-        await self._publish_pending_orders()
-        await self._publish_stock()
+                order['finished'] = True
+                await self._publish_order(order)
+                await self._publish_stock()
 
     async def stock_initial(self):
         async with self.engine.acquire() as connection:
@@ -50,12 +51,12 @@ class ServerComponent(ApplicationSession):
     async def _publish_stock(self):
         async with self.engine.acquire() as connection:
             stocks_by_product = await db_select_stock(connection)
+        print("Publishing stock: {}".format(stocks_by_product))
         self.publish(u'stock.onchange', stocks_by_product)
 
-    async def _publish_pending_orders(self):
-        async with self.engine.acquire() as connection:
-            pending_orders = await db_select_pending_orders(connection)
-        self.publish(u'orders.pending.onchange', pending_orders)
+    async def _publish_order(self, order):
+        print("Publishing order: {}".format(order))
+        self.publish(u'orders.onchange', order)
 
 
 runner = ApplicationRunner(url=u"ws://localhost:8080/ws", realm=u"realm1")
