@@ -32,12 +32,17 @@ export default class OrderList extends React.Component {
 		this.props.session.call('order.finish', [order])
 	}
 
+	renderProduct(prod) {
+		return 	<div key={prod.id}>
+					<Product product={prod.product} quantity={prod.quantity} />
+					<input type="checkbox" checked={prod.finished} onClick={() => this.onClick(prod)} />
+				</div>
+	}
+
 	render() {
-		let orders = this.state.orders.map((prod) => 
-			<div key={prod.id}>
-				<Product product={prod.product} quantity={prod.quantity} />
-				<input type="checkbox" checked={prod.finished} onClick={() => this.onClick(prod)} />
-			</div>)
+		let finished = this.state.orders.filter((order) => order.finished)
+		let pending = this.state.orders.filter((order) => !order.finished)
+		let orders = pending.concat(finished).map((order) => this.renderProduct(order))
 		return 	<div>
 					<h2>{this.props.bar}</h2>
 					<div id="products">
