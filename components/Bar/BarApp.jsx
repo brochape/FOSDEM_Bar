@@ -1,25 +1,25 @@
 import React from 'react';
-import StockList from './StockList.jsx';
-import Menu from './Menu.jsx';
-import StockOrder from './StockOrder.jsx';
+import BarOrder from './BarOrder.jsx';
+import StockList from '../shared/StockList.jsx';
+import Menu from '../shared/Menu.jsx';
 
 export default class BarApp extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
             mode: 0,
-            menus: ['Stock', 'Commandes']
+            menus: ['Stock', 'Commander']
         }
     }
 
     menuClick(state) {
-        this.setState({mode: state});
+        this.setState({mode: state})
     }
 
     render() {
-        var content = null
+        let content = null
         if (this.state.mode == 1) {
-            content = <StockOrder bars={this.props.bars} session={this.props.session}/>
+            content = <BarOrder assignment={this.props.assignment} products={this.props.products} session={this.props.session}/>
         }
         else {
             content = <StockList products={this.props.products} />;

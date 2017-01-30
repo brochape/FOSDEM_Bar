@@ -1,6 +1,5 @@
 import React from 'react';
-import Product from './Product.jsx';
-import VeryLargeButton from './VeryLargeButton.jsx';
+import Product from '../shared/Product.jsx';
 
 export default class OrderList extends React.Component {
 	constructor(props) {

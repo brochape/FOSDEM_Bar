@@ -1,5 +1,5 @@
 import React from 'react';
-import Product from './Product.jsx';
+import Product from '../shared/Product.jsx';
 
 export default class BarOrder extends React.Component{
     constructor(props) {
