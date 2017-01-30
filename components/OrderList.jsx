@@ -1,5 +1,6 @@
 import React from 'react';
-import ProductList from './ProductList.jsx';
+import Product from './Product.jsx';
+import VeryLargeButton from './VeryLargeButton.jsx';
 
 export default class OrderList extends React.Component {
 	constructor(props) {
@@ -17,10 +18,21 @@ export default class OrderList extends React.Component {
 		})
 	}
 
+	onClick(product) {
+		this.props.session.call('order.finish', [product])
+	}
+
 	render() {
-		return <div>
-			<h2>{this.props.bar}</h2>
-			<ProductList products={this.state.products} />
-		</div>
+		let products = this.state.products.map((prod) => 
+			<div>
+				<Product product={prod.product} quantity={prod.quantity} />
+				<input type="checkbox" checked={prod.finished} right onClick={() => this.onClick(prod)} />
+			</div>)
+		return 	<div>
+					<h2>{this.props.bar}</h2>
+					<div id="products">
+						{products}
+					</div>
+				</div>
 	}
 }

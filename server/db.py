@@ -49,11 +49,10 @@ async def db_finish_order(connection, order):
     return False
 
 async def db_modify_stock(connection, order):
-    for product in order['products']:
-        await connection.execute(stocks
-                                 .insert()
-                                 .values({'product': product['product'],
-                                          'quantity': -product['quantity']}))
+    await connection.execute(stocks
+                             .insert()
+                             .values({'product': order['product'],
+                                      'quantity': -order['quantity']}))
     return True
 
 async def db_select_stock(connection):
