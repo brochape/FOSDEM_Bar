@@ -23,7 +23,7 @@ export default class OrderList extends React.Component {
 		})
 		if (!exists) {
 			this.setState({
-				orders: this.state.orders.concat([order])
+				orders: [order].concat(this.state.orders)
 			})
 		}
 	}
@@ -32,10 +32,10 @@ export default class OrderList extends React.Component {
 		this.props.session.call('order.finish', [order])
 	}
 
-	renderProduct(prod) {
-		return 	<div key={prod.id}>
-					<Product product={prod.product} quantity={prod.quantity} />
-					<input type="checkbox" checked={prod.finished} onClick={() => this.onClick(prod)} />
+	renderProduct(order) {
+		return 	<div key={order.id}>
+					<Product product={order.product} quantity={order.quantity} />
+					<input type="checkbox" checked={order.finished} onClick={() => this.onClick(order)} />
 				</div>
 	}
 
