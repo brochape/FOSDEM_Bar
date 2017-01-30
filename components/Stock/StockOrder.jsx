@@ -5,9 +5,6 @@ import OrderList from './OrderList.jsx';
 export default class StockOrder extends React.Component{
     constructor(props) {
         super(props);
-        this.state = {
-            orders: []
-        }
         this.props.session.call('orders.pending.initial', []).then((orders) => this.initOrders(orders))
         this.props.session.subscribe('orders.onchange', (order) => this.onOrdersChange(order[0]))
     }
@@ -17,7 +14,6 @@ export default class StockOrder extends React.Component{
     }
 
     onOrdersChange(order) {
-        console.log(order)
         this.refs[order.bar].add_order(order)
     }
 
