@@ -1,5 +1,5 @@
 import React from 'react';
-import StockList from '../shared/StockList.jsx';
+import ProductList from '../shared/ProductList.jsx';
 import Menu from '../shared/Menu.jsx';
 import StockOrder from './StockOrder.jsx';
 
@@ -22,7 +22,7 @@ export default class BarApp extends React.Component{
             content = <StockOrder bars={this.props.bars} session={this.props.session}/>
         }
         else {
-            content = <StockList products={this.props.products} />;
+            content = <ProductList products={this.props.products} />;
         }
         return  <div>
                     <Menu items={this.state.menus} menuClick={(index)=>this.menuClick(index)} />
