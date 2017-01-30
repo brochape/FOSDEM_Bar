@@ -11,18 +11,10 @@ metadata = sa.MetaData()
 orders = sa.Table('orders',
                   metadata,
                   sa.Column('id', sa.Integer, primary_key=True),
-                  sa.Column('from', sa.String(255)),
+                  sa.Column('bar', sa.String(255)),
+                  sa.Column('product', sa.String(255)),
+                  sa.Column('quantity', sa.Integer),
                   sa.Column('finished', sa.Boolean, default=False))
-
-order_lines = sa.Table('order_lines',
-                       metadata,
-                       sa.Column('id', sa.Integer, primary_key=True),
-                       sa.Column('product', sa.String(255)),
-                       sa.Column('quantity', sa.Integer),
-                       sa.Column('order_id',
-                                 sa.Integer,
-                                 sa.ForeignKey('orders.id'),
-                                 nullable=False))
 
 stocks = sa.Table('stocks',
                   metadata,
@@ -38,24 +30,15 @@ async def create_table(conn, table):
 
 async def db_create_tables(connection):
     await create_table(connection, orders)
-    await create_table(connection, order_lines)
     await create_table(connection, stocks)
 
 async def db_insert_order(connection, order):
-    if len(order['products']) > 0:
-        result = await connection.execute(orders.insert()
-                                                .values({
-                                                    'from': order['from']
-                                                }).returning())
-        first = await result.first()
-        order['id'] = first[0]
-        for product in order['products']:
-            product['order_id'] = order['id']
-            await connection.execute(order_lines.insert()
-                                                .values(**product)
-                                                .returning())
-        return True
-    return False
+    result = await connection.execute(orders.insert()
+                                            .values(order)
+                                            .returning())
+    first = await result.first()
+    order['id'] = first[0]
+    return True
 
 async def db_finish_order(connection, order):
     if await connection.execute(orders
@@ -89,11 +72,5 @@ async def db_select_pending_orders(connection):
     pending_orders = await connection.execute(orders
                                                .select()
                                                .where(orders.c.finished == False)) # NOQA
-    results = []
-    for r in pending_orders:
-        r = dict(r)
-        lines = await connection.execute(select([order_lines.c.product, order_lines.c.quantity])
-                                         .where(order_lines.c.order_id == r['id']))
-        r['products'] = [dict(l) for l in lines]
-        results.append(r)
+    results = [dict(l) for l in pending_orders]
     return results
