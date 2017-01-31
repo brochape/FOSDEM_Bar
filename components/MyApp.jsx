@@ -14,7 +14,7 @@ export default class MyApp extends React.Component {
         };
 
         this.connection = new autobahn.Connection({
-           url: "ws://127.0.0.1:8080/ws",
+           url: `ws://${window.location.hostname}:${window.location.port}/ws`,
            realm: "realm1"
         });
 
