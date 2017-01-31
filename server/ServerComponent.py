@@ -9,6 +9,12 @@ from db import db_select_stock
 from db import db_create_tables
 from db import db_select_pending_orders
 
+try:
+    from .local_settings import * # NOQA
+except ImportError:
+    DB_USER = "fosdem"
+    DB_NAME = "fosdem"
+
 
 class ServerComponent(ApplicationSession):
     async def order_create(self, order):
@@ -43,8 +49,8 @@ class ServerComponent(ApplicationSession):
         await self.register(self.order_finish, u'order.finish')
         await self.register(self.stock_initial, u'stock.initial')
         await self.register(self.orders_pending_initial, u'orders.pending.initial')
-        self.engine = await create_engine(user='fosdem',
-                                          database='fosdem')
+        self.engine = await create_engine(user=DB_USER,
+                                          database=DB_NAME)
         async with self.engine.acquire() as connection:
             await db_create_tables(connection)
 
