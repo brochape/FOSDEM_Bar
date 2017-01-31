@@ -10,7 +10,7 @@ from db import db_create_tables
 from db import db_select_pending_orders
 
 try:
-    from .local_settings import * # NOQA
+    from local_settings import * # NOQA
 except ImportError:
     DB_USER = "fosdem"
     DB_NAME = "fosdem"
