@@ -33,9 +33,16 @@ export default class OrderList extends React.Component {
 	}
 
 	renderProduct(order) {
+		var p = null
+		if (order.finished) {
+			p = <s>{order.product}</s>
+		}
+		else {
+			p = order.product
+		}
 		return 	<tbody>
 					<tr key={order.id}>
-						<td className="product">{order.product}</td>
+						<td className="product">{p}</td>
 						<td><b>{order.quantity}</b></td>
 						<td><input type="checkbox" checked={order.finished} onClick={() => this.onClick(order)} /></td>
 					</tr>
