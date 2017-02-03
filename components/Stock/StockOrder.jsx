@@ -18,10 +18,15 @@ export default class StockOrder extends React.Component{
     }
 
     render() {
+        let n = this.props.bars.length
         let bars = this.props.bars.map((bar) => 
-            <OrderList key={bar} ref={bar} bar={bar} orders={[]} session={this.props.session} />)
-        return  <div>
-                    {bars}
+            <div className={"col-sm-" + 12 / n}>
+                <OrderList key={bar} ref={bar} bar={bar} orders={[]} session={this.props.session} />
+            </div>)
+        return  <div className={"container-fluid"}>
+                    <div className="row">
+                        {bars}
+                    </div>
                 </div>;
     }
 }

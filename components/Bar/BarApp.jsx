@@ -27,7 +27,7 @@ export default class BarApp extends React.Component{
         return  <div>
                     <Menu items={this.state.menus} menuClick={(index)=>this.menuClick(index)} />
                     {content}
-                    <button onClick={() => this.props.backClick()}>Back</button>
+                    <button className={"mybutton btn"} onClick={() => this.props.backClick()}>Back</button>
                 </div>;
     }
 }

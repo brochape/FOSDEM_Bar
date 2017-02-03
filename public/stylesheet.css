@@ -29,6 +29,27 @@ ul li{
     transition:0.3s;
 }
 
+.mybutton {
+    list-style:none;
+    display: inline-block;
+    display: inline-block;
+    padding: 10px 20px;
+    cursor:pointer;
+    background-color:#eee;
+    color:#7B8585;
+    
+    transition:0.3s;  
+}
+
+.mybutton:hover {
+    background-color:#E093FF;
+}
+
+.mybutton.focused {
+    color:#fff;
+    background-color:#BC1AFF;  
+}
+
 ul li:hover{
     background-color:#E093FF;
 }
@@ -51,6 +72,13 @@ p{
     list-style: none;
     display: inline-block;
     width: 340px;
+}
+
+.product {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 20px;
+    list-style: none;
 }
 
 #products p{

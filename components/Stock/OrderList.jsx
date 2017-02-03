@@ -33,10 +33,20 @@ export default class OrderList extends React.Component {
 	}
 
 	renderProduct(order) {
-		return 	<div key={order.id}>
-					<Product product={order.product} quantity={order.quantity} />
-					<input type="checkbox" checked={order.finished} onClick={() => this.onClick(order)} />
-				</div>
+		var p = null
+		if (order.finished) {
+			p = <s>{order.product}</s>
+		}
+		else {
+			p = order.product
+		}
+		return 	<tbody>
+					<tr key={order.id}>
+						<td className="product">{p}</td>
+						<td><b>{order.quantity}</b></td>
+						<td><input type="checkbox" checked={order.finished} onClick={() => this.onClick(order)} /></td>
+					</tr>
+				</tbody>
 	}
 
 	render() {
@@ -45,9 +55,9 @@ export default class OrderList extends React.Component {
 		let orders = pending.concat(finished).map((order) => this.renderProduct(order))
 		return 	<div>
 					<h2>{this.props.bar}</h2>
-					<div id="products">
+					<table className="table table-striped table-bordered">
 						{orders}
-					</div>
+					</table>
 				</div>
 	}
 }
