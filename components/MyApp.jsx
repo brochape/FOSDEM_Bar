@@ -58,9 +58,9 @@ export default class MyApp extends React.Component {
             // choose an assignment
             if (this.state.assignment == null) {
                 let choices = ["Stock"].concat(this.props.bars).map(
-                    (name) => <button key={name} onClick={() => this.chooseAssigment(name)}>{name}</button>
+                    (name) => <button className="mybutton btn" key={name} onClick={() => this.chooseAssigment(name)}>{name}</button>
                 );
-                content = <div>Choose your assignment<br />{choices}</div>
+                content = <div><h1>Choose your assignment<br />{choices}</h1></div>
             }
             // stock app
             else if (this.state.assignment == "Stock") {
