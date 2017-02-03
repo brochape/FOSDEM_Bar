@@ -33,10 +33,11 @@ export default class OrderList extends React.Component {
 	}
 
 	renderProduct(order) {
-		return 	<div key={order.id}>
-					<Product product={order.product} quantity={order.quantity} />
-					<input type="checkbox" checked={order.finished} onClick={() => this.onClick(order)} />
-				</div>
+		return 	<tr key={order.id}>
+					<td>{order.product}</td>
+					<td><b>{order.quantity}</b></td>
+					<td><input type="checkbox" checked={order.finished} onClick={() => this.onClick(order)} /></td>
+				</tr>
 	}
 
 	render() {
@@ -45,9 +46,9 @@ export default class OrderList extends React.Component {
 		let orders = pending.concat(finished).map((order) => this.renderProduct(order))
 		return 	<div>
 					<h2>{this.props.bar}</h2>
-					<div id="products">
+					<table className="table table-striped">
 						{orders}
-					</div>
+					</table>
 				</div>
 	}
 }
