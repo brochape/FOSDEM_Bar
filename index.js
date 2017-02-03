@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import MyApp from './components/MyApp.jsx';
 
-let listBars = ['Bar 1', 'Bar 2'];
+let listBars = ['Campouce', 'Janson', 'K'];
 
 ReactDOM.render(
     <MyApp bars={listBars} />,
