@@ -1,5 +1,5 @@
 import React from 'react';
-import Product from '../shared/Product.jsx';
+import Product from './Product.jsx';
 
 export default class OrderList extends React.Component {
 	constructor(props) {
@@ -40,11 +40,15 @@ export default class OrderList extends React.Component {
 		else {
 			p = order.product
 		}
+		var checkbox = null
+		if (this.props.checkbox) {
+			checkbox = <td><input type="checkbox" checked={order.finished} onClick={() => this.onClick(order)} /></td>
+		}
 		return 	<tbody>
 					<tr key={order.id}>
 						<td className="product">{p}</td>
 						<td><b>{order.quantity}</b></td>
-						<td><input type="checkbox" checked={order.finished} onClick={() => this.onClick(order)} /></td>
+						{checkbox}
 					</tr>
 				</tbody>
 	}

@@ -1,6 +1,6 @@
 import React from 'react';
 import ProductList from '../shared/ProductList.jsx';
-import OrderList from './OrderList.jsx';
+import OrderList from '../shared/OrderList.jsx';
 
 export default class StockOrder extends React.Component{
     constructor(props) {
@@ -21,7 +21,7 @@ export default class StockOrder extends React.Component{
         let n = this.props.bars.length
         let bars = this.props.bars.map((bar) => 
             <div className={"col-sm-" + 12 / n}>
-                <OrderList key={bar} ref={bar} bar={bar} orders={[]} session={this.props.session} />
+                <OrderList key={bar} ref={bar} bar={bar} orders={[]} session={this.props.session} checkbox={true} />
             </div>)
         return  <div className={"container-fluid"}>
                     <div className="row">
