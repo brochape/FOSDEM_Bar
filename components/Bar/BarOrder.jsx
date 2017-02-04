@@ -34,7 +34,10 @@ export default class BarOrder extends React.Component{
 
     render() {
         // sort products by most ordered
-        var products = this.props.products.sort((a, b) => this.state.old_orders[b.product] - this.state.old_orders[a.product])
+        var products = this.props.products.sort((a, b) => {
+            var x = this.state.old_orders[b.product] - this.state.old_orders[a.product]
+            return x == 0 ? a.product.localeCompare(b.product) : x
+        })
         // create DOM elements for products
         products = products.map((prod) => <Product  key={prod.product}
                                                     ref={prod.product}
